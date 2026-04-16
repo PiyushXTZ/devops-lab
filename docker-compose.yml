@@ -1,0 +1,42 @@
+services:
+
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - redis_data:/data
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: ./app
+    image: devops-lab:v1
+    environment:
+      - REDIS_HOST=redis
+    networks:
+      - backend
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  nginx:
+    build: ./nginx
+    ports:
+      - "80:80"
+    networks:
+      - backend
+    depends_on:
+      - app
+    restart: unless-stopped
+
+volumes:
+  redis_data:
+
+networks:
+  backend:
+    driver: bridge
