@@ -14,7 +14,7 @@ services:
 
   app:
     build: ./app
-    image: devops-lab:v1
+    image: devops-lab:v2-multistage
     environment:
       - REDIS_HOST=redis
     networks:

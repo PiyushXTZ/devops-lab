@@ -1,5 +1,10 @@
 venv/
 __pycache__/
 *.pyc
+*.pyo
 .env
 *.md
+test_app.py       # tests don't belong in the production image
+.pytest_cache/
+*.egg-info/
+.coverage
